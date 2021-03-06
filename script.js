@@ -50,7 +50,7 @@ function editCard(cardId) {
     curCard.innerHTML =
         "   <p>Photo Url: <input class=\"card-photo-input\" type=\"text\"></p>\n" +
         "   <p>Description: <textarea class=\"card-description-input\"></textarea></p>\n" +
-        "   <button class=\"add-card-button\" onclick=\"editCardFinish(" + cardId.toString() + ")\">add</button>\n";
+        "   <button class=\"add-card-button\" onclick=\"editCardFinish(" + cardId.toString() + ")\">complete</button>\n";
     curCard.getElementsByClassName("card-photo-input")[0].value = cardPhoto;
     curCard.getElementsByClassName("card-description-input")[0].value = cardDescription;
 }
@@ -79,11 +79,38 @@ function moveCardUp(cardId) {
     let secondCard = document.getElementById("card" + cardId.toString());
     if (firstCard === null) {
         firstCard = document.getElementById("card-input" + (cardId - 1).toString());
+        firstCard.setAttribute("class", "card");
+        firstCard.setAttribute("id", "card" + (cardId - 1).toString());
+        secondCard.setAttribute("class", "card-input");
+        secondCard.setAttribute("id", "card-input" + cardId.toString());
+        let photoUrl = firstCard.getElementsByClassName("card-photo-input")[0].value;
+        let description = firstCard.getElementsByClassName("card-description-input")[0].value;
+        firstCard.getElementsByClassName("add-card-button")[0].setAttribute("onclick", "editCardFinish(" + cardId.toString() + ")");
+        let firstHTMl = firstCard.innerHTML;
+        firstCard.innerHTML = secondCard.innerHTML;
+        secondCard.innerHTML = firstHTMl;
+        secondCard.getElementsByClassName("card-photo-input")[0].value = photoUrl;
+        secondCard.getElementsByClassName("card-description-input")[0].value = description;
+        Array.prototype.forEach.call(firstCard.getElementsByClassName("tool-button"),
+            function (curButton) {
+                let onClickFunc = curButton.getAttribute("onclick");
+                curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId - 1).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+            });
         return;
     }
-    let firstHTMl=firstCard.innerHTML;
-    firstCard.innerHTML=secondCard.innerHTML;
-    secondCard.innerHTML=firstHTMl;
+    let firstHTMl = firstCard.innerHTML;
+    firstCard.innerHTML = secondCard.innerHTML;
+    secondCard.innerHTML = firstHTMl;
+    Array.prototype.forEach.call(firstCard.getElementsByClassName("tool-button"),
+        function (curButton) {
+            let onClickFunc = curButton.getAttribute("onclick");
+            curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId - 1).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+        });
+    Array.prototype.forEach.call(secondCard.getElementsByClassName("tool-button"),
+        function (curButton) {
+            let onClickFunc = curButton.getAttribute("onclick");
+            curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+        });
 }
 
 function moveCardDown(cardId) {
@@ -93,9 +120,36 @@ function moveCardDown(cardId) {
     let secondCard = document.getElementById("card" + (cardId + 1).toString());
     if (secondCard === null) {
         secondCard = document.getElementById("card-input" + (cardId + 1).toString());
+        secondCard.setAttribute("class", "card");
+        secondCard.setAttribute("id", "card" + (cardId + 1).toString());
+        firstCard.setAttribute("class", "card-input");
+        firstCard.setAttribute("id", "card-input" + cardId.toString());
+        let photoUrl = secondCard.getElementsByClassName("card-photo-input")[0].value;
+        let description = secondCard.getElementsByClassName("card-description-input")[0].value;
+        secondCard.getElementsByClassName("add-card-button")[0].setAttribute("onclick", "editCardFinish(" + cardId.toString() + ")");
+        secondCard.getElementsByClassName("card-photo-input")[0].value = photoUrl;
+        secondCard.getElementsByClassName("card-description-input")[0].value = description;
+        Array.prototype.forEach.call(firstCard.getElementsByClassName("tool-button"),
+            function (curButton) {
+                let onClickFunc = curButton.getAttribute("onclick");
+                curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId + 1).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+            });
+        let firstHTMl = firstCard.innerHTML;
+        firstCard.innerHTML = secondCard.innerHTML;
+        secondCard.innerHTML = firstHTMl;
         return;
     }
-    let firstHTMl=firstCard.innerHTML;
-    firstCard.innerHTML=secondCard.innerHTML;
-    secondCard.innerHTML=firstHTMl;
+    let firstHTMl = firstCard.innerHTML;
+    firstCard.innerHTML = secondCard.innerHTML;
+    secondCard.innerHTML = firstHTMl;
+    Array.prototype.forEach.call(firstCard.getElementsByClassName("tool-button"),
+        function (curButton) {
+            let onClickFunc = curButton.getAttribute("onclick");
+            curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+        });
+    Array.prototype.forEach.call(secondCard.getElementsByClassName("tool-button"),
+        function (curButton) {
+            let onClickFunc = curButton.getAttribute("onclick");
+            curButton.setAttribute("onclick", onClickFunc.substring(0, onClickFunc.indexOf('(') + 1) + (cardId + 1).toString() + onClickFunc.substring(onClickFunc.indexOf(')'), onClickFunc.length));
+        });
 }

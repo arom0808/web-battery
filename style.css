@@ -1,5 +1,6 @@
 body{
     margin: 0px;
+    background-color: dimgray;
 }
 .header-line{
     display: flex;
@@ -35,6 +36,8 @@ main{
 .card-description{
     overflow: scroll;
     min-width: 100px;
+    width: 100%;
+    margin-right: 1%;
 }
 .card-tool-buttons{
     flex-shrink: 999;
